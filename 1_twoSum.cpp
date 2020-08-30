@@ -16,16 +16,13 @@ vector<int> twoSum (const vector<int>& nums, const int& target) {
   unordered_map<int, int> index_map;
     
   for (int i = 0; i < nums.size(); i++) {
-    //index_map[nums[i]] = i; //insert the number and index
-    index_map.insert({nums[i],i}); //insert the number and index
     int diff = target - nums[i];
     if (index_map.count(diff) > 0) {
-      if (index_map[diff] != i) {
-	pair.push_back(index_map[diff]);
-	pair.push_back(i);
-	return(pair);
-      }
+      pair.push_back(index_map[diff]);
+      pair.push_back(i);
+      return(pair);
     }
+    index_map[nums[i]] = i; //insert the number and index
   }
   return(pair);
 }
