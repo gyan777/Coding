@@ -3,13 +3,17 @@
 #include <map>
 #include <cmath>
 
+//We have a list of points on the plane.  Find the K closest points to the origin (0, 0).
+//(Here, the distance between two points on a plane is the Euclidean distance.)
+  
 using namespace std;
 
 vector<vector<int>> kClosest_1(vector<vector<int>>& points, int K) {
+  
   multimap<double, vector<int>*> euclidean_map;
 
   // For each set of points, solve for euclidean distance and insert into a map
-  for (vector<int>& point_pair : points) {
+  for (vector<int>& point_pair : points) { //also use a reference so the paoint pairs are not copied!!
     // No need to compute sqrt()
     double euclidean_distance = pow(point_pair[0], 2) + pow(point_pair[1], 2);
     euclidean_map.emplace(euclidean_distance, &point_pair);
