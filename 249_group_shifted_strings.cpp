@@ -3,46 +3,30 @@
 #include <unordered_map>
 #include <string>
 
-
-// The trick here is to diff eevery node with 
+// Great solution. Instead of brute force rotating the sequence
+// create a signture (encoded as difference between adjacent elements)
+// so abc get encoded as "bb" and ccc get encoded as "aa"
+// Then every new string is added to a hash map with the signature as the key
 using namespace std;
 
-string rotateString (string A) {
-  string str = A;
-  for (int i = 0; i < A.length(); i++) {
-    str[i] = (A[i] == 'z') ? 'a' : (A[i] + 1);
-  }
-  return str;
-}
-    
 vector<vector<string>> groupStrings(vector<string>& strings) {
-  unordered_multimap<string, int> inputStrings;
-  vector<vector<string>> result;
-  for (int i=0; i < strings.size(); i++) {
-    inputStrings[strings[i]] = 0;
+  unordered_map<string, vector<string>> m;
+  for(auto &str: strings) {
+    string signature;
+    for(int i = 1; i < str.size(); i++) 
+      signature.push_back((26 + str[i] - str[i-1]) % 26 + 'a');
+    m[signature].push_back(str);
   }
-        
-  for (auto elem: inputStrings) {
-    vector<string> newList;
-    if (elem.second > 0) continue;
-    newList.push_back(elem.first);
-    string rotatedString = rotateString(elem.first);
-    while (rotatedString != elem.first) {
-      if (inputStrings.count(rotatedString)) {
-	inputStrings[rotatedString]++;
-	newList.push_back(rotatedString);
-      }
-      rotatedString = rotateString(rotatedString);
-    }
-    result.push_back(newList);
-  }
-  return (result);
+  vector<vector<string>> res;
+  for(auto &itr: m)
+    res.push_back(itr.second);
+  return res;
 }
 
 int main (int argc, char **argv) {
 
-  //  vector<string> input = {"abc", "bcd", "acef", "xyz", "az", "ba", "a", "z"};
-  vector<string> input = {"a", "a"};  
+  vector<string> input = {"abc", "bcd", "acef", "xyz", "az", "ba", "a", "z"};
+  //  vector<string> input = {"a", "a"};  
 
   vector<vector<string>> output = groupStrings (input);
   
